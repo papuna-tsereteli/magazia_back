@@ -7,14 +7,22 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class ProductSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name', read_only=True)
-    image = serializers.ImageField(use_url=True)
+    category = serializers.StringRelatedField()
+    # Add the new slider_image field to be included in the API response
+    slider_image = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'price', 'description', 'image',
-            'category', 'category_name', 'popularity', 'date_added',
-            'homepage_placement' # Added the new field
+            'id',
+            'name',
+            'description',
+            'price',
+            'image',
+            'slider_image', # Add this line
+            'category',
+            'popularity',
+            'created_at',
+            'homepage_placement'
         ]
 

@@ -1,6 +1,13 @@
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
+
+
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all().order_by('name')
+    serializer_class = CategorySerializer
 
 
 class ProductListView(generics.ListAPIView):
@@ -9,34 +16,19 @@ class ProductListView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Product.objects.all()
 
-        # Updated filtering logic for homepage placement
-        placement = self.request.query_params.get('placement')
-        if placement:
-            queryset = queryset.filter(homepage_placement=placement.upper())
-
-        # Handle latest products filter
-        latest = self.request.query_params.get('latest')
-        if latest and latest.lower() == 'true':
-            limit = int(self.request.query_params.get('limit', 4))  # Default limit to 4 if not specified
-            return queryset.order_by('-date_added')[:limit]
-
-        # Category filtering
-        category_name = self.request.query_params.get('category')
+        category_name = self.request.query_params.get('category', None)
         if category_name and category_name.lower() != 'all':
             queryset = queryset.filter(category__name__iexact=category_name)
 
-        # Sorting
-        sort_by = self.request.query_params.get('sortBy')
-        if sort_by == 'price-asc':
+        sortBy = self.request.query_params.get('sortBy', 'date-desc')  # Default sort
+        if sortBy == 'price-asc':
             queryset = queryset.order_by('price')
-        elif sort_by == 'price-desc':
+        elif sortBy == 'price-desc':
             queryset = queryset.order_by('-price')
-        elif sort_by == 'date-desc':
-            queryset = queryset.order_by('-date_added')
-        elif sort_by == 'date-asc':
-            queryset = queryset.order_by('date_added')
-        else:  # Default sort by popularity
+        elif sortBy == 'popularity':
             queryset = queryset.order_by('-popularity')
+        else:  # Default sort by date
+            queryset = queryset.order_by('-created_at')
 
         return queryset
 
@@ -46,7 +38,26 @@ class ProductDetailView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
 
 
-class CategoryListView(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+# NEW: A dedicated view for all homepage data
+class HomepageDataView(APIView):
+    def get(self, request, format=None):
+        # Query for products set to 'SLIDER'
+        slider_products_qs = Product.objects.filter(homepage_placement='SLIDER').order_by('-popularity')
 
+        # Query for products set to 'FEATURED', limit to 8
+        featured_products_qs = Product.objects.filter(homepage_placement='FEATURED').order_by('-popularity')[:8]
+
+        # Query for the latest 8 products overall
+        latest_products_qs = Product.objects.order_by('-created_at')[:8]
+
+        # Pass context to serializers to build absolute image URLs
+        context = {'request': request}
+        slider_serializer = ProductSerializer(slider_products_qs, many=True, context=context)
+        featured_serializer = ProductSerializer(featured_products_qs, many=True, context=context)
+        latest_serializer = ProductSerializer(latest_products_qs, many=True, context=context)
+
+        return Response({
+            'slider_products': slider_serializer.data,
+            'featured_products': featured_serializer.data,
+            'latest_products': latest_serializer.data,
+        })
