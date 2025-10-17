@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x)grvzoai64eumg$$e%tcjhj^097&j6h901(7&(-7m@6f)+n8g'
+SECRET_KEY = 'w4frfloa^!_w9n%62c2z_uq10*03s*05+-gfp&t67o#vhmy9zx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,6 +49,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:5174",
     "http://127.0.0.1:5174",
+    "http://63.176.47.213",
+    "https://63.176.47.213",
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,6 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Media files (User-uploaded content)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
