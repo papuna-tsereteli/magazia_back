@@ -27,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+DEBUG = False
 
-# Parse ALLOWED_HOSTS from environment variable
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
+# Allowed hosts
+ALLOWED_HOSTS = ["63.176.47.213", "localhost", "127.0.0.1", "api.allsy.ge"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,8 +48,16 @@ INSTALLED_APPS = [
     'contacts'
 ]
 
-# Parse CORS_ALLOWED_ORIGINS from environment variable
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if origin.strip()]
+# CORS settings kept in settings file
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "https://allsy.ge",
+    "https://www.allsy.ge",
+    "https://api.allsy.ge",
+]
 
 CORS_ALLOW_ALL_ORIGINS = False  # Keep this False for security
 
