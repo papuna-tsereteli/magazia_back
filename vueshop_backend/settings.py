@@ -51,7 +51,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5174",
     "http://63.176.47.213",
     "https://63.176.47.213",
+    "http://my-vue-app-frontend-12345.s3-website.eu-central-1.amazonaws.com",
+    "http://www.my-vue-app-frontend-12345.s3-website.eu-central-1.amazonaws.com",
+    "https://allsy.ge",
+    "https://www.allsy.ge",
 ]
+CORS_ALLOW_ALL_ORIGINS = False  # Keep this False for security
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
