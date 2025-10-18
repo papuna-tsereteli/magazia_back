@@ -10,9 +10,14 @@ class Submission(models.Model):
     ]
 
     name = models.CharField(max_length=100, verbose_name="სახელი")
-    email = models.EmailField(verbose_name="ელ. ფოსტა")
     phone = models.CharField(max_length=50, verbose_name="ტელეფონის ნომერი")
-    message = models.TextField(blank=True, null=True, verbose_name="შეტყობინება")
+    address = models.CharField(
+        max_length=255,
+        verbose_name="მისამართი",
+        default="მისამართი მითითებული არ არის"
+    )
+    quantity = models.PositiveIntegerField(default=1, verbose_name="რაოდენობა")
+    comment = models.TextField(blank=True, null=True, verbose_name="კომენტარი")
 
     submission_type = models.CharField(
         max_length=10,
