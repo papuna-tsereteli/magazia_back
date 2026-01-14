@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(python manage.py makemigrations:*)",
+      "Bash(python manage.py:*)",
+      "Bash(timeout /t:*)",
+      "Bash(python:*)",
+      "Bash(del /F nul)",
+      "Bash(git clean:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

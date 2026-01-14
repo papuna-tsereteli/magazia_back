@@ -1,0 +1,23 @@
+[Unit]
+Description=Gunicorn daemon for VueShop Django Backend
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/magazia_back
+Environment="PATH=/home/ubuntu/magazia_back/venv/bin"
+ExecStart=/home/ubuntu/magazia_back/venv/bin/gunicorn \
+          --config /home/ubuntu/magazia_back/gunicorn_config.py \
+          vueshop_backend.wsgi:application
+
+# Restart policy
+Restart=on-failure
+RestartSec=5s
+
+# Security
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
